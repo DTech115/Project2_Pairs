@@ -10,6 +10,10 @@
 int posX = 0, posY = 0;
 
 void draw_board();
+void get_mouse_input(int x, int y, logic& game_logic);
+void drawShape(int x, int y);
+void flipCard(int x, int y, int boardx, int boardy, logic& game_logic);
+
 
 int main()
 {
@@ -75,8 +79,13 @@ int main()
 
 
 		if (draw) {
-			
+			get_mouse_input(posX, posY, game_logic);
+
+
+
+			draw = false;
 		}
+		al_flip_display();
 	}
 
 
@@ -100,8 +109,8 @@ void draw_board() {
 	al_draw_line(512, 0, 512, 480, al_map_rgb(255, 255, 255), 2);
 }
 
-void drawShape() {
-
+void drawShape(int x, int y) {
+	al_draw_filled_circle(x, y, 20, al_map_rgb(255, 0, 0));
 }
 
 void get_mouse_input(int x, int y, logic &game_logic) {
@@ -110,7 +119,7 @@ void get_mouse_input(int x, int y, logic &game_logic) {
 		flipCard(64, 48, 0, 0, game_logic);
 	}
 	else if ((x > 128 && x < 256 && y < 96)) {
-		flipCard(64, 48, 0, 0, game_logic);
+		flipCard(192, 48, 0, 0, game_logic);
 	}
 	else if ((x > 256 && x < 384 && y < 96)) {
 		flipCard(64, 48, 0, 0, game_logic);
@@ -188,5 +197,5 @@ void get_mouse_input(int x, int y, logic &game_logic) {
 }
 
 void flipCard(int x, int y, int boardx, int boardy, logic& game_logic) {
-	if (game_logic.)
+	drawShape(x, y);
 }
