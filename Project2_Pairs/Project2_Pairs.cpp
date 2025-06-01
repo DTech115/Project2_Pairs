@@ -104,9 +104,89 @@ void drawShape() {
 
 }
 
-void get_mouse_input(int x, int y) {
+void get_mouse_input(int x, int y, logic &game_logic) {
+	//row 1
 	if ((x < 128 && y < 96)) {
-
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 128 && x < 256 && y < 96)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 256 && x < 384 && y < 96)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 384 && x < 512 && y < 96)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 512 && y < 96)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	//row 2
+	if ((x < 128 && y > 96 && y < 192)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 128 && x < 256 && y > 96 && y < 192)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 256 && x < 384 && y > 96 && y < 192)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 384 && x < 512 && y > 96 && y < 192)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 512 && y > 96 && y < 192)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	//row 3
+	if ((x < 128 && y > 192 && y < 288)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 128 && x < 256 && y > 192 && y < 288)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 256 && x < 384 && y > 192 && y < 288)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 384 && x < 512 && y > 192 && y < 288)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 512 && y > 192 && y < 288)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	//row 4
+	if ((x < 128 && y > 384 && y < 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 128 && x < 256 && y > 384 && y < 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 256 && x < 384 && y > 384 && y < 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 384 && x < 512 && y > 384 && y < 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 512 && y > 384 && y < 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	//row 5
+	if ((x < 128 && y > 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 128 && x < 256 && y > 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 256 && x < 384 && y > 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 384 && x < 512 && y > 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
+	}
+	else if ((x > 512 && y > 512)) {
+		flipCard(64, 48, 0, 0, game_logic);
 	}
 }
 
+void flipCard(int x, int y, int boardx, int boardy, logic& game_logic) {
+	if (game_logic.)
+}
