@@ -18,10 +18,12 @@ logic::logic() {
 void logic::setup() {
 	std::vector<char> cards;
 
-	for (char c = 'A'; c < 'A' + 13; c++) {
+	for (char c = 'A'; c < 'A' + 12; c++) {
 		cards.push_back(c);
 		cards.push_back(c);
+		std::cout << c << " ";
 	}
+	std::cout << "\n";
 	//cards.push_back('n');
 
 	srand(time(NULL));
@@ -43,3 +45,4 @@ void logic::setup() {
 	}
 
 }
+

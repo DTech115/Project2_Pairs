@@ -4,9 +4,8 @@ class logic {
 public:
 	logic();
 	void setup();
-	bool already_played();
-	
-	bool set_shape(int boxNum);
+	//game_object get_shape();
+	bool set_shape(int x, int y);
 
 private:
 	char board[5][5];
