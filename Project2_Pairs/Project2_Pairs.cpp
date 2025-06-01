@@ -9,10 +9,11 @@
 
 int posX = 0, posY = 0;
 
+void draw_board();
+
 int main()
 {
 	logic game_logic;
-	bool gameover = false;
 	ALLEGRO_DISPLAY* Screen = NULL;
 	int width = 640, height = 480;
 
@@ -50,7 +51,62 @@ int main()
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 
 	game_logic.setup();
-	//draw_board();
-
+	draw_board();
 	al_flip_display();
+	
+	while (!done) {
+		ALLEGRO_EVENT ev;
+		al_wait_for_event(event_queue, &ev);
+		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			done = true;
+		}
+		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+		{
+			if (ev.mouse.button & 1)
+			{
+				posX = ev.mouse.x;
+				posY = ev.mouse.y;
+
+				draw = true;
+			}
+		}
+		draw_board();
+
+
+		if (draw) {
+			
+		}
+	}
+
+
+	
+	al_rest(5.0);
+	al_destroy_event_queue(event_queue);
+	al_destroy_display(Screen);
+
+	return 0;
 }
+
+void draw_board() {
+	al_draw_line(0, 96, 640, 96, al_map_rgb(255, 255, 255), 2);
+	al_draw_line(0, 192, 640, 192, al_map_rgb(255, 255, 255), 2);
+	al_draw_line(0, 288, 640, 288, al_map_rgb(255, 255, 255), 2);
+	al_draw_line(0, 384, 640, 384, al_map_rgb(255, 255, 255), 2);
+
+	al_draw_line(128, 0, 128, 480, al_map_rgb(255, 255, 255), 2);
+	al_draw_line(256, 0, 256, 480, al_map_rgb(255, 255, 255), 2);
+	al_draw_line(384, 0, 384, 480, al_map_rgb(255, 255, 255), 2);
+	al_draw_line(512, 0, 512, 480, al_map_rgb(255, 255, 255), 2);
+}
+
+void drawShape() {
+
+}
+
+void get_mouse_input(int x, int y) {
+	if ((x < 128 && y < 96)) {
+
+	}
+}
+

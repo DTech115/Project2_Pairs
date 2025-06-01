@@ -13,6 +13,8 @@ logic::logic() {
 			playBoard[i][j] = 'n';
 		}
 	}
+
+
 }
 
 void logic::setup() {
@@ -24,7 +26,6 @@ void logic::setup() {
 		std::cout << c << " ";
 	}
 	std::cout << "\n";
-	//cards.push_back('n');
 
 	srand(time(NULL));
 	std::random_shuffle(cards.begin(), cards.end());
@@ -46,3 +47,23 @@ void logic::setup() {
 
 }
 
+bool logic::compare(int x, int y) {
+	if (playBoard[x][y] == board[x][y]) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+char logic::get_shape(int x, int y) {
+	return board[x][y];
+}
+
+void logic::set_shape(int x, int y, char c) {
+	playBoard[x][y] == c;
+}
+
+//void reset() {
+//
+//}
