@@ -50,7 +50,7 @@ int main()
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 
 	game_logic.setup();
-	draw_board();
+	//draw_board();
 
 	al_flip_display();
 }

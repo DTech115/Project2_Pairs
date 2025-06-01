@@ -3,24 +3,43 @@
 #include <vector>
 #include <random>
 #include "logic.h"
+#include <iostream>
+
+logic::logic() {
+
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			board[i][j] = 'n';
+			playBoard[i][j] = 'n';
+		}
+	}
+}
 
 void logic::setup() {
-	int pairs[24];
 	std::vector<char> cards;
 
-	for (char c = 'A'; c < 'A' + 12; c++) {
+	for (char c = 'A'; c < 'A' + 13; c++) {
 		cards.push_back(c);
 		cards.push_back(c);
 	}
+	//cards.push_back('n');
 
 	srand(time(NULL));
 	std::random_shuffle(cards.begin(), cards.end());
 
 	int count = 0;
-	for (int i = 0; i < 12; i++) {
-		for (int j = 0; j < 12; j++) {
-			board[i][j] = cards[count++];
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			if (i == 4 && j == 4) {
+				board[i][j] = '*'; 
+				std::cout << board[i][j] << " ";
+			}
+			else {
+				board[i][j] = cards[count++];
+				std::cout << board[i][j] << " ";
+			}
 		}
+		std::cout << "\n";
 	}
 
 }

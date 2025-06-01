@@ -2,5 +2,9 @@
 
 class game_object
 {
+public:
+
+private:
+	 
 };
 

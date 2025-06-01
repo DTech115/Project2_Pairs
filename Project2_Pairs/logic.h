@@ -2,6 +2,7 @@
 
 class logic {
 public:
+	logic();
 	void setup();
 	bool already_played();
 	
@@ -9,5 +10,5 @@ public:
 
 private:
 	char board[5][5];
-
+	char playBoard[5][5];
 };
