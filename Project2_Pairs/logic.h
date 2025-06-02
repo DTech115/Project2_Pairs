@@ -14,11 +14,18 @@ public:
 	int getFirstCardY();
 	int getFirstBoardX();
 	int getFirstBoardY();
+
+	void increasePairs();
+	int getPairs();
+	int getMatched();
 	//void reset();
 
 private:
 	char board[5][5];
 	char playBoard[5][5];
+
+	int totalPairs = 12;
+	int matchedPairs = 0;
 
 	int firstCardX;
 	int firstCardY;

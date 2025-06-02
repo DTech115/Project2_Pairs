@@ -9,7 +9,7 @@
 
 int posX = 0, posY = 0;
 
-void draw_board();
+void drawBoard();
 void get_mouse_input(int x, int y, logic& game_logic, int &click);
 void drawShape(int x, int y, char shape);
 void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &click);
@@ -45,6 +45,8 @@ int main()
 	al_init_font_addon();
 	al_init_ttf_addon();
 
+	ALLEGRO_FONT* font = al_load_font("DFPPOPCorn-W12.ttf", 18, 0);
+
 	bool draw = false, done = false;
 
 	ALLEGRO_EVENT_QUEUE* event_queue = NULL;
@@ -58,7 +60,7 @@ int main()
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 
 	game_logic.setup();
-	draw_board();
+	drawBoard();
 	al_flip_display();
 	
 	while (!done) {
@@ -78,8 +80,8 @@ int main()
 				draw = true;
 			}
 		}
-		draw_board();
-
+		drawBoard();
+		al_draw_text(font, al_map_rgb(255, 255, 255), 540, 450, 0, "Matches!");
 
 		if (draw) {
 			get_mouse_input(posX, posY, game_logic, click);
@@ -91,14 +93,15 @@ int main()
 
 
 	
-	//al_rest(5.0);
+	al_rest(3.0);
+	al_destroy_font(font);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(Screen);
 
 	return 0;
 }
 
-void draw_board() {
+void drawBoard() {
 	al_draw_line(0, 96, 640, 96, al_map_rgb(255, 255, 255), 2);
 	al_draw_line(0, 192, 640, 192, al_map_rgb(255, 255, 255), 2);
 	al_draw_line(0, 288, 640, 288, al_map_rgb(255, 255, 255), 2);
@@ -160,7 +163,7 @@ void drawShape(int x, int y, char shape) {
 		al_draw_filled_triangle(x - 20, y, x - size, y + size, x, y + size, al_map_rgb(255, 215, 0));
 		al_draw_filled_triangle(x + 20, y, x, y + size, x + size, y + size, al_map_rgb(255, 215, 0));
 	}
-	//al_destroy_font(font);
+	al_destroy_font(font);
 }
 
 void get_mouse_input(int x, int y, logic& game_logic, int &click) {
@@ -181,7 +184,7 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 		flipCard(576, 48, 0, 4, game_logic, click);
 	}
 	//row 2
-	if ((x < 128 && y > 96 && y < 192)) {
+	else if ((x < 128 && y > 96 && y < 192)) {
 		flipCard(64, 144, 1, 0, game_logic, click);
 	}
 	else if ((x > 128 && x < 256 && y > 96 && y < 192)) {
@@ -197,7 +200,7 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 		flipCard(576, 144, 1, 4, game_logic, click);
 	}
 	//row 3
-	if ((x < 128 && y > 192 && y < 288)) {
+	else if ((x < 128 && y > 192 && y < 288)) {
 		flipCard(64, 240, 2, 0, game_logic, click);
 	}
 	else if ((x > 128 && x < 256 && y > 192 && y < 288)) {
@@ -213,7 +216,7 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 		flipCard(576, 240, 2, 4, game_logic, click);
 	}
 	//row 4
-	if ((x < 128 && y > 288 && y < 384)) {
+	else if ((x < 128 && y > 288 && y < 384)) {
 		flipCard(64, 336, 3, 0, game_logic, click);
 	}
 	else if ((x > 128 && x < 256 && y > 288 && y < 384)) {
@@ -229,7 +232,7 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 		flipCard(576, 336, 3, 4, game_logic, click);
 	}
 	//row 5
-	if ((x < 128 && y > 384)) {
+	else if ((x < 128 && y > 384)) {
 		flipCard(64, 432, 4, 0, game_logic, click);
 	}
 	else if ((x > 128 && x < 256 && y > 384)) {
@@ -241,9 +244,10 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 	else if ((x > 384 && x < 512 && y > 384)) {
 		flipCard(448, 432, 4, 3, game_logic, click);
 	}
-	else if ((x > 512 && y > 384)) {
-		flipCard(576, 432, 4, 4, game_logic, click);
-	}
+	/*else if ((x > 512 && y > 384)) {
+
+	}*/
+	
 }
 
 void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &click) {
@@ -272,10 +276,23 @@ void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &clic
 		int cardBoardX = game_logic.getFirstBoardX();
 		int cardBoardY = game_logic.getFirstBoardY();
 
-
+		//if match, cover square with STATIC! else, remove with black
 		if (shape == game_logic.get_shape(cardBoardX, cardBoardY)) {
-			al_draw_filled_rectangle(firstX - 64, firstY - 48, firstX + 64, firstY + 48, al_map_rgb(0, 255, 0));
-			al_draw_filled_rectangle(x - 64, y - 48, x + 64, y + 48, al_map_rgb(0, 255, 0));
+			for (int px = firstX - 64; px < firstX + 64; px++) {
+				for (int py = firstY - 48; py < firstY + 48; py++) {
+					ALLEGRO_COLOR color = al_map_rgb(rand() % 255, rand() % 255, rand() % 255);
+					al_draw_filled_rectangle(px, py, px + 1, py + 1, color);
+				}
+			}
+			for (int px = x - 64; px < x + 64; px++) {
+				for (int py = y - 48; py < y + 48; py++) {
+					ALLEGRO_COLOR color = al_map_rgb(rand() % 255, rand() % 255, rand() % 255);
+					al_draw_filled_rectangle(px, py, px + 1, py + 1, color);
+				}
+			}
+			
+			//also increase score:
+			game_logic.increasePairs();
 		}
 		else {
 			al_draw_filled_rectangle(firstX - 64, firstY - 48, firstX + 64, firstY + 48, al_map_rgb(0, 0, 0));
