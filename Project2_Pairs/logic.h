@@ -9,9 +9,11 @@ public:
 	char get_shape(int x, int y);
 	void set_shape(int x, int y, char c);
 
-	void setFirstCard(int x, int y);
+	void setFirstCard(int x, int y, int boardx, int boardy);
 	int getFirstCardX();
 	int getFirstCardY();
+	int getFirstBoardX();
+	int getFirstBoardY();
 	//void reset();
 
 private:
@@ -20,4 +22,7 @@ private:
 
 	int firstCardX;
 	int firstCardY;
+	int firstCardBoardX;
+	int firstCardBoardY;
+	
 };

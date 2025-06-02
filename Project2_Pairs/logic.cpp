@@ -22,9 +22,7 @@ void logic::setup() {
 	for (char c = 'A'; c < 'A' + 12; c++) {
 		cards.push_back(c);
 		cards.push_back(c);
-		std::cout << c << " ";
 	}
-	std::cout << "\n";
 
 	srand(time(NULL));
 	std::random_shuffle(cards.begin(), cards.end());
@@ -63,18 +61,29 @@ void logic::set_shape(int x, int y, char c) {
 	playBoard[x][y] = c;
 }
 
-void logic::setFirstCard(int x, int y) {
+void logic::setFirstCard(int x, int y, int boardx, int boardy) {
 	firstCardX = x;
 	firstCardY = y;
+	firstCardBoardX = boardx;
+	firstCardBoardY = boardy;
+	
 }
 
 int logic::getFirstCardX() {
 	return firstCardX;
 }
-
 int logic::getFirstCardY() {
 	return firstCardY;
 }
+int logic::getFirstBoardX() {
+	return firstCardBoardX;
+}
+int logic::getFirstBoardY() {
+	return firstCardBoardY;
+
+}
+
+
 
 //void reset() {
 //

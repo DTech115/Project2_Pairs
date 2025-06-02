@@ -160,7 +160,7 @@ void drawShape(int x, int y, char shape) {
 		al_draw_filled_triangle(x - 20, y, x - size, y + size, x, y + size, al_map_rgb(255, 215, 0));
 		al_draw_filled_triangle(x + 20, y, x, y + size, x + size, y + size, al_map_rgb(255, 215, 0));
 	}
-	al_destroy_font(font);
+	//al_destroy_font(font);
 }
 
 void get_mouse_input(int x, int y, logic& game_logic, int &click) {
@@ -249,8 +249,13 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &click) {
 	if (click == 0) {
 		char shape = game_logic.get_shape(boardx, boardy); //get corresponding letter from backend 2Darray
+
+		game_logic.set_shape(boardx, boardy, shape);
+
 		drawShape(x, y, shape);
-		game_logic.setFirstCard(x, y); 		//store the first card's coordinates for later
+
+		game_logic.setFirstCard(x, y, boardx, boardy); 		//store the first card's coordinates for later
+
 		click = 1;
 	}
 	else if (click == 1) {
@@ -261,10 +266,20 @@ void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &clic
 		al_flip_display();
 		al_rest(0.4);  //pause!
 
-	//check if they match...
+		//check if they match...
 		int firstX = game_logic.getFirstCardX();
 		int firstY = game_logic.getFirstCardY();
-		al_draw_filled_rectangle(firstX - 64, firstY - 48, firstX + 64, firstY + 48, al_map_rgb(0, 0, 0));
-		al_draw_filled_rectangle(x - 64, y - 48, x + 64, y + 48, al_map_rgb(0, 0, 0));
+		int cardBoardX = game_logic.getFirstBoardX();
+		int cardBoardY = game_logic.getFirstBoardY();
+
+
+		if (shape == game_logic.get_shape(cardBoardX, cardBoardY)) {
+			al_draw_filled_rectangle(firstX - 64, firstY - 48, firstX + 64, firstY + 48, al_map_rgb(0, 255, 0));
+			al_draw_filled_rectangle(x - 64, y - 48, x + 64, y + 48, al_map_rgb(0, 255, 0));
+		}
+		else {
+			al_draw_filled_rectangle(firstX - 64, firstY - 48, firstX + 64, firstY + 48, al_map_rgb(0, 0, 0));
+			al_draw_filled_rectangle(x - 64, y - 48, x + 64, y + 48, al_map_rgb(0, 0, 0));
+		}
 	}
 }

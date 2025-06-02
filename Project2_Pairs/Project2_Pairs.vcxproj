@@ -135,7 +135,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="game_object.cpp" />
     <ClCompile Include="logic.cpp" />
     <ClCompile Include="Project2_Pairs.cpp" />
   </ItemGroup>
@@ -143,7 +142,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="game_object.h" />
     <ClInclude Include="logic.h" />
   </ItemGroup>
   <ItemGroup>
