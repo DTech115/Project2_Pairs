@@ -14,7 +14,6 @@ logic::logic() {
 		}
 	}
 
-
 }
 
 void logic::setup() {
@@ -61,7 +60,20 @@ char logic::get_shape(int x, int y) {
 }
 
 void logic::set_shape(int x, int y, char c) {
-	playBoard[x][y] == c;
+	playBoard[x][y] = c;
+}
+
+void logic::setFirstCard(int x, int y) {
+	firstCardX = x;
+	firstCardY = y;
+}
+
+int logic::getFirstCardX() {
+	return firstCardX;
+}
+
+int logic::getFirstCardY() {
+	return firstCardY;
 }
 
 //void reset() {

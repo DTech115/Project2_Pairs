@@ -10,9 +10,9 @@
 int posX = 0, posY = 0;
 
 void draw_board();
-void get_mouse_input(int x, int y, logic& game_logic);
+void get_mouse_input(int x, int y, logic& game_logic, int &click);
 void drawShape(int x, int y);
-void flipCard(int x, int y, int boardx, int boardy, logic& game_logic);
+void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &click);
 
 
 int main()
@@ -20,6 +20,9 @@ int main()
 	logic game_logic;
 	ALLEGRO_DISPLAY* Screen = NULL;
 	int width = 640, height = 480;
+
+	static int click = 0;
+
 
 	if (!al_init())
 	{
@@ -79,8 +82,9 @@ int main()
 
 
 		if (draw) {
-			get_mouse_input(posX, posY, game_logic);
+			
 
+			get_mouse_input(posX, posY, game_logic, click);
 
 
 			draw = false;
@@ -113,89 +117,105 @@ void drawShape(int x, int y) {
 	al_draw_filled_circle(x, y, 20, al_map_rgb(255, 0, 0));
 }
 
-void get_mouse_input(int x, int y, logic &game_logic) {
+void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 	//row 1
 	if ((x < 128 && y < 96)) {
-		flipCard(64, 48, 0, 0, game_logic);
+		flipCard(64, 48, 0, 0, game_logic, click);
 	}
 	else if ((x > 128 && x < 256 && y < 96)) {
-		flipCard(192, 48, 0, 1, game_logic);
+		flipCard(192, 48, 0, 1, game_logic, click);
 	}
 	else if ((x > 256 && x < 384 && y < 96)) {
-		flipCard(320, 48, 0, 2, game_logic);
+		flipCard(320, 48, 0, 2, game_logic, click);
 	}
 	else if ((x > 384 && x < 512 && y < 96)) {
-		flipCard(448, 48, 0, 3, game_logic);
+		flipCard(448, 48, 0, 3, game_logic, click);
 	}
 	else if ((x > 512 && y < 96)) {
-		flipCard(576, 48, 0, 4, game_logic);
+		flipCard(576, 48, 0, 4, game_logic, click);
 	}
 	//row 2
 	if ((x < 128 && y > 96 && y < 192)) {
-		flipCard(64, 144, 1, 0, game_logic);
+		flipCard(64, 144, 1, 0, game_logic, click);
 	}
 	else if ((x > 128 && x < 256 && y > 96 && y < 192)) {
-		flipCard(192, 144, 1, 1, game_logic);
+		flipCard(192, 144, 1, 1, game_logic, click);
 	}
 	else if ((x > 256 && x < 384 && y > 96 && y < 192)) {
-		flipCard(320, 144, 1, 2, game_logic);
+		flipCard(320, 144, 1, 2, game_logic, click);
 	}
 	else if ((x > 384 && x < 512 && y > 96 && y < 192)) {
-		flipCard(448, 144, 1, 3, game_logic);
+		flipCard(448, 144, 1, 3, game_logic, click);
 	}
 	else if ((x > 512 && y > 96 && y < 192)) {
-		flipCard(576, 144, 1, 4, game_logic);
+		flipCard(576, 144, 1, 4, game_logic, click);
 	}
 	//row 3
 	if ((x < 128 && y > 192 && y < 288)) {
-		flipCard(64, 240, 2, 0, game_logic);
+		flipCard(64, 240, 2, 0, game_logic, click);
 	}
 	else if ((x > 128 && x < 256 && y > 192 && y < 288)) {
-		flipCard(192, 240, 2, 1, game_logic);
+		flipCard(192, 240, 2, 1, game_logic, click);
 	}
 	else if ((x > 256 && x < 384 && y > 192 && y < 288)) {
-		flipCard(320, 240, 2, 2, game_logic);
+		flipCard(320, 240, 2, 2, game_logic, click);
 	}
 	else if ((x > 384 && x < 512 && y > 192 && y < 288)) {
-		flipCard(448, 240, 2, 3, game_logic);
+		flipCard(448, 240, 2, 3, game_logic, click);
 	}
 	else if ((x > 512 && y > 192 && y < 288)) {
-		flipCard(576, 240, 2, 4, game_logic);
+		flipCard(576, 240, 2, 4, game_logic, click);
 	}
 	//row 4
 	if ((x < 128 && y > 288 && y < 384)) {
-		flipCard(64, 336, 3, 0, game_logic);
+		flipCard(64, 336, 3, 0, game_logic, click);
 	}
 	else if ((x > 128 && x < 256 && y > 288 && y < 384)) {
-		flipCard(192, 336, 3, 1, game_logic);
+		flipCard(192, 336, 3, 1, game_logic, click);
 	}
 	else if ((x > 256 && x < 384 && y > 288 && y < 384)) {
-		flipCard(320, 336, 3, 2, game_logic);
+		flipCard(320, 336, 3, 2, game_logic, click);
 	}
 	else if ((x > 384 && x < 512 && y > 288 && y < 384)) {
-		flipCard(448, 336, 3, 3, game_logic);
+		flipCard(448, 336, 3, 3, game_logic, click);
 	}
 	else if ((x > 512 && y > 288 && y < 384)) {
-		flipCard(576, 336, 3, 4, game_logic);
+		flipCard(576, 336, 3, 4, game_logic, click);
 	}
 	//row 5
 	if ((x < 128 && y > 384)) {
-		flipCard(64, 432, 4, 0, game_logic);
+		flipCard(64, 432, 4, 0, game_logic, click);
 	}
 	else if ((x > 128 && x < 256 && y > 384)) {
-		flipCard(192, 432, 4, 1, game_logic);
+		flipCard(192, 432, 4, 1, game_logic, click);
 	}
 	else if ((x > 256 && x < 384 && y > 384)) {
-		flipCard(320, 432, 4, 2, game_logic);
+		flipCard(320, 432, 4, 2, game_logic, click);
 	}
 	else if ((x > 384 && x < 512 && y > 384)) {
-		flipCard(448, 432, 4, 3, game_logic);
+		flipCard(448, 432, 4, 3, game_logic, click);
 	}
 	else if ((x > 512 && y > 384)) {
-		flipCard(576, 432, 4, 4, game_logic);
+		flipCard(576, 432, 4, 4, game_logic, click);
 	}
 }
 
-void flipCard(int x, int y, int boardx, int boardy, logic& game_logic) {
-	drawShape(x, y);
+void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &click) {
+	if (click == 0) {
+		drawShape(x, y);
+		game_logic.setFirstCard(x, y);
+		click = 1;
+	}
+	else if (click == 1) {
+		drawShape(x, y);
+		click = 0;
+		al_flip_display();
+		al_rest(1.0);
+
+	//check if they match...
+		int firstX = game_logic.getFirstCardX();
+		int firstY = game_logic.getFirstCardY();
+		al_draw_filled_rectangle(firstX - 64, firstY - 48, firstX + 64, firstY + 48, al_map_rgb(0, 0, 0));
+		al_draw_filled_rectangle(x - 64, y - 48, x + 64, y + 48, al_map_rgb(0, 0, 0));
+	}
 }
