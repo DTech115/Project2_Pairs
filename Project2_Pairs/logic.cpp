@@ -85,6 +85,7 @@ int logic::getFirstBoardY() {
 
 void logic::increasePairs() {
 	matchedPairs += 1;
+	totalPairs -= 1;
 }
 
 int logic::getMatched() {

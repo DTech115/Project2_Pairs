@@ -45,7 +45,7 @@ int main()
 	al_init_font_addon();
 	al_init_ttf_addon();
 
-	ALLEGRO_FONT* font = al_load_font("DFPPOPCorn-W12.ttf", 18, 0);
+	ALLEGRO_FONT* font = al_load_font("DFPPOPCorn-W12.ttf", 14, 0);
 
 	bool draw = false, done = false;
 
@@ -81,7 +81,11 @@ int main()
 			}
 		}
 		drawBoard();
-		al_draw_text(font, al_map_rgb(255, 255, 255), 540, 450, 0, "Matches!");
+		int matches = game_logic.getMatched();
+		int totalPairs = game_logic.getPairs();
+		al_draw_filled_rectangle(512, 384, width, height, al_map_rgb(0, 0, 0));
+		al_draw_textf(font, al_map_rgb(255, 255, 255), 520, 410, 0, "Pairs Left: %i", totalPairs);
+		al_draw_textf(font, al_map_rgb(255, 255, 255), 520, 440, 0, "Matches: %i", matches);
 
 		if (draw) {
 			get_mouse_input(posX, posY, game_logic, click);
@@ -244,9 +248,6 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 	else if ((x > 384 && x < 512 && y > 384)) {
 		flipCard(448, 432, 4, 3, game_logic, click);
 	}
-	/*else if ((x > 512 && y > 384)) {
-
-	}*/
 	
 }
 
