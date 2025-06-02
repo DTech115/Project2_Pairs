@@ -47,6 +47,8 @@ int main()
 
 	ALLEGRO_FONT* font = al_load_font("DFPPOPCorn-W12.ttf", 14, 0);
 
+	ALLEGRO_FONT* biggerFont = al_load_font("DFPPOPCorn-W12.ttf", 36, 0);
+
 	bool draw = false, done = false;
 
 	ALLEGRO_EVENT_QUEUE* event_queue = NULL;
@@ -70,6 +72,7 @@ int main()
 		{
 			done = true;
 		}
+
 		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 		{
 			if (ev.mouse.button & 1)
@@ -91,6 +94,8 @@ int main()
 
 		//close game if you won!!!
 		if (matches == 12) {
+			al_draw_textf(biggerFont, al_map_rgb(255, 0, 0), width / 2, height / 2, ALLEGRO_ALIGN_CENTER, "CONGRATS! You win!");
+			al_draw_textf(biggerFont, al_map_rgb(255, 0, 0), width / 2, height / 2 + 40, ALLEGRO_ALIGN_CENTER, "Press SPACEBAR to play again.");
 			done = true;
 		}
 
@@ -106,6 +111,7 @@ int main()
 	
 	al_rest(3.0);
 	al_destroy_font(font);
+	al_destroy_font(biggerFont);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(Screen);
 

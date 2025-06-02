@@ -13,6 +13,8 @@ logic::logic() {
 			playBoard[i][j] = 'n';
 		}
 	}
+	matchedPairs = 0;
+	totalPairs = 12;
 
 }
 
@@ -90,6 +92,6 @@ int logic::getPairs() {
 }
 
 
-//void reset() {
-//
-//}
+void logic::reset() {
+	setup();
+}

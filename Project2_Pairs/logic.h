@@ -28,14 +28,14 @@ public:
 	int getPairs();
 	int getMatched();
 
-	//void reset();
+	void reset();
 
 private:
 	char board[5][5];
 	char playBoard[5][5];
 
-	int totalPairs = 12;
-	int matchedPairs = 0;
+	int totalPairs;
+	int matchedPairs;
 
 	int firstCardX;
 	int firstCardY;
