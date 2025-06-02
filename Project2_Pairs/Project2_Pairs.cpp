@@ -81,11 +81,18 @@ int main()
 			}
 		}
 		drawBoard();
+
+		//score drawing:
 		int matches = game_logic.getMatched();
 		int totalPairs = game_logic.getPairs();
 		al_draw_filled_rectangle(512, 384, width, height, al_map_rgb(0, 0, 0));
 		al_draw_textf(font, al_map_rgb(255, 255, 255), 520, 410, 0, "Pairs Left: %i", totalPairs);
 		al_draw_textf(font, al_map_rgb(255, 255, 255), 520, 440, 0, "Matches: %i", matches);
+
+		//close game if you won!!!
+		if (matches == 12) {
+			done = true;
+		}
 
 		if (draw) {
 			get_mouse_input(posX, posY, game_logic, click);
@@ -251,53 +258,66 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 	
 }
 
-void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &click) {
-	if (click == 0) {
-		char shape = game_logic.get_shape(boardx, boardy); //get corresponding letter from backend 2Darray
+void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int& click) {
+	if (game_logic.get_playing_shape(boardx, boardy) == 'n') {
 
-		game_logic.set_shape(boardx, boardy, shape);
+		if (click == 0) {
+			char shape = game_logic.get_shape(boardx, boardy); //get corresponding letter from backend 2Darray
 
-		drawShape(x, y, shape);
+			game_logic.set_playing_shape(boardx, boardy, shape);
 
-		game_logic.setFirstCard(x, y, boardx, boardy); 		//store the first card's coordinates for later
+			drawShape(x, y, shape);
 
-		click = 1;
-	}
-	else if (click == 1) {
-		char shape = game_logic.get_shape(boardx, boardy); //get corresponding letter from backend 2Darray
-		drawShape(x, y, shape);
-		click = 0;
+			game_logic.setFirstCard(x, y, boardx, boardy); 		//store the first card's coordinates for later
 
-		al_flip_display();
-		al_rest(0.4);  //pause!
-
-		//check if they match...
-		int firstX = game_logic.getFirstCardX();
-		int firstY = game_logic.getFirstCardY();
-		int cardBoardX = game_logic.getFirstBoardX();
-		int cardBoardY = game_logic.getFirstBoardY();
-
-		//if match, cover square with STATIC! else, remove with black
-		if (shape == game_logic.get_shape(cardBoardX, cardBoardY)) {
-			for (int px = firstX - 64; px < firstX + 64; px++) {
-				for (int py = firstY - 48; py < firstY + 48; py++) {
-					ALLEGRO_COLOR color = al_map_rgb(rand() % 255, rand() % 255, rand() % 255);
-					al_draw_filled_rectangle(px, py, px + 1, py + 1, color);
-				}
-			}
-			for (int px = x - 64; px < x + 64; px++) {
-				for (int py = y - 48; py < y + 48; py++) {
-					ALLEGRO_COLOR color = al_map_rgb(rand() % 255, rand() % 255, rand() % 255);
-					al_draw_filled_rectangle(px, py, px + 1, py + 1, color);
-				}
-			}
-			
-			//also increase score:
-			game_logic.increasePairs();
+			click = 1;
 		}
-		else {
-			al_draw_filled_rectangle(firstX - 64, firstY - 48, firstX + 64, firstY + 48, al_map_rgb(0, 0, 0));
-			al_draw_filled_rectangle(x - 64, y - 48, x + 64, y + 48, al_map_rgb(0, 0, 0));
+		else if (click == 1) {
+
+
+			//check if the section is already clicked!
+			char shape = game_logic.get_shape(boardx, boardy); //get corresponding letter from backend 2Darray
+
+			drawShape(x, y, shape);
+			click = 0;
+
+			al_flip_display();
+			al_rest(0.4);  //pause!
+
+			//check if they match...
+			int firstX = game_logic.getFirstCardX();
+			int firstY = game_logic.getFirstCardY();
+			int cardBoardX = game_logic.getFirstBoardX();
+			int cardBoardY = game_logic.getFirstBoardY();
+
+			//if match, cover square with STATIC! else, remove with black
+			if (shape == game_logic.get_shape(cardBoardX, cardBoardY)) {
+				for (int px = firstX - 64; px < firstX + 64; px++) {
+					for (int py = firstY - 48; py < firstY + 48; py++) {
+						ALLEGRO_COLOR color = al_map_rgb(rand() % 255, rand() % 255, rand() % 255);
+						al_draw_filled_rectangle(px, py, px + 1, py + 1, color);
+					}
+				}
+				for (int px = x - 64; px < x + 64; px++) {
+					for (int py = y - 48; py < y + 48; py++) {
+						ALLEGRO_COLOR color = al_map_rgb(rand() % 255, rand() % 255, rand() % 255);
+						al_draw_filled_rectangle(px, py, px + 1, py + 1, color);
+					}
+				}
+
+				game_logic.set_playing_shape(boardx, boardy, shape);
+
+				//also increase score:
+				game_logic.increasePairs();
+			}
+			else { //flips back over to black
+				al_draw_filled_rectangle(firstX - 64, firstY - 48, firstX + 64, firstY + 48, al_map_rgb(0, 0, 0));
+				al_draw_filled_rectangle(x - 64, y - 48, x + 64, y + 48, al_map_rgb(0, 0, 0));
+
+				//turn failed pair back into n's on the played board
+				game_logic.set_playing_shape(cardBoardX, cardBoardY, 'n');
+				game_logic.set_playing_shape(boardx, boardy, 'n');
+			}
 		}
 	}
 }

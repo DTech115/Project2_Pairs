@@ -44,20 +44,13 @@ void logic::setup() {
 
 }
 
-bool logic::compare(int x, int y) {
-	if (playBoard[x][y] == board[x][y]) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
 char logic::get_shape(int x, int y) {
 	return board[x][y];
 }
-
-void logic::set_shape(int x, int y, char c) {
+char logic::get_playing_shape(int x, int y) {
+	return playBoard[x][y];
+}
+void logic::set_playing_shape(int x, int y, char c) {
 	playBoard[x][y] = c;
 }
 
