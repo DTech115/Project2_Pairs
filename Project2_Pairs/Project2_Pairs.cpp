@@ -11,12 +11,12 @@ int posX = 0, posY = 0;
 
 void draw_board();
 void get_mouse_input(int x, int y, logic& game_logic, int &click);
-void drawShape(int x, int y);
+void drawShape(int x, int y, char shape);
 void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &click);
-
 
 int main()
 {
+
 	logic game_logic;
 	ALLEGRO_DISPLAY* Screen = NULL;
 	int width = 640, height = 480;
@@ -82,10 +82,7 @@ int main()
 
 
 		if (draw) {
-			
-
 			get_mouse_input(posX, posY, game_logic, click);
-
 
 			draw = false;
 		}
@@ -113,8 +110,57 @@ void draw_board() {
 	al_draw_line(512, 0, 512, 480, al_map_rgb(255, 255, 255), 2);
 }
 
-void drawShape(int x, int y) {
-	al_draw_filled_circle(x, y, 20, al_map_rgb(255, 0, 0));
+void drawShape(int x, int y, char shape) {
+	ALLEGRO_FONT* font = al_load_font("DFPPOPCorn-W12.ttf", 50, 0);
+
+	int size = 40;
+	if (shape == 'A') {
+		al_draw_filled_circle(x, y, size, al_map_rgb(255, 0, 0));
+	}
+	else if (shape == 'B') {
+		al_draw_filled_rectangle(x - size, y - size, x + size, y + size, al_map_rgb(0, 215, 100));
+	}
+	else if (shape == 'C') {
+		al_draw_filled_triangle(x, y - size, x - size, y + size, x + size, y + size, al_map_rgb(255, 255, 0));
+	}
+	else if (shape == 'D') {
+		al_draw_text(font, al_map_rgb(100, 255, 0), x, y, ALLEGRO_ALIGN_CENTER, "?");
+	}
+	else if (shape == 'E') {
+		al_draw_filled_rectangle(x - 10, y - size, x + 10, y + size, al_map_rgb(255, 100, 100));
+		al_draw_filled_rectangle(x - size, y - 10, x + size, y + 10, al_map_rgb(255, 100, 100));
+	}
+	else if (shape == 'F') {
+		al_draw_filled_triangle(x, y - size, x - 30, y + size, x + 30, y + size, al_map_rgb(255, 215, 0));
+		al_draw_filled_triangle(x - size, y - 10, x + size, y - 10, x, y + 20, al_map_rgb(255, 215, 0));
+		al_draw_filled_triangle(x, y + 20, x - 30, y + size, x + 30, y + size, al_map_rgb(0, 0, 0));
+	}
+	else if (shape == 'G') {
+		al_draw_filled_triangle(x - size, y - size, x + size, y - size, x, y, al_map_rgb(200, 255, 200));
+		al_draw_filled_triangle(x - size, y + size, x + size, y + size, x, y, al_map_rgb(255, 200, 0));
+	}
+	else if (shape == 'H') {
+		al_draw_filled_circle(x, y, size, al_map_rgb(255, 215, 0));
+		al_draw_filled_triangle(x, y, x + size, y - size / 2, x + size, y + size / 2, al_map_rgb(0, 0, 0));
+	}
+	else if (shape == 'I') {
+		al_draw_filled_circle(x, y, size, al_map_rgb(255, 100, 0));
+		al_draw_filled_circle(x, y, size / 2, al_map_rgb(0, 0, 0));
+	}
+	else if (shape == 'J') {
+		for (int i = 0; i < 4; i++) {
+			al_draw_circle(x, y, size - i * 10, al_map_rgb(255, 255, 255), 2);
+		}
+	}
+	else if (shape == 'K') {
+		al_draw_filled_ellipse(x, y, size + 20, size, al_map_rgb(255, 150, 0));
+	}
+	else if (shape == 'L') {
+		al_draw_filled_triangle(x, y - size, x - 20, y, x +20, y, al_map_rgb(255, 215, 0));
+		al_draw_filled_triangle(x - 20, y, x - size, y + size, x, y + size, al_map_rgb(255, 215, 0));
+		al_draw_filled_triangle(x + 20, y, x, y + size, x + size, y + size, al_map_rgb(255, 215, 0));
+	}
+	al_destroy_font(font);
 }
 
 void get_mouse_input(int x, int y, logic& game_logic, int &click) {
@@ -202,15 +248,18 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 
 void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &click) {
 	if (click == 0) {
-		drawShape(x, y);
-		game_logic.setFirstCard(x, y);
+		char shape = game_logic.get_shape(boardx, boardy); //get corresponding letter from backend 2Darray
+		drawShape(x, y, shape);
+		game_logic.setFirstCard(x, y); 		//store the first card's coordinates for later
 		click = 1;
 	}
 	else if (click == 1) {
-		drawShape(x, y);
+		char shape = game_logic.get_shape(boardx, boardy); //get corresponding letter from backend 2Darray
+		drawShape(x, y, shape);
 		click = 0;
+
 		al_flip_display();
-		al_rest(1.0);
+		al_rest(0.4);  //pause!
 
 	//check if they match...
 		int firstX = game_logic.getFirstCardX();

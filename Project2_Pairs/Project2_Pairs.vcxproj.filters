@@ -36,4 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="DFPPOPCorn-W12.ttf">
+      <Filter>Source Files</Filter>
+    </Font>
+  </ItemGroup>
 </Project>
