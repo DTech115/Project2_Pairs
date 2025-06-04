@@ -38,16 +38,16 @@ void logic::setup() {
 		for (int j = 0; j < 5; j++) {
 			if (i == 4 && j == 4) {
 				board[i][j] = '*'; 
-				std::cout << board[i][j] << " ";
+				//std::cout << board[i][j] << " ";
 			}
 			else {
 				board[i][j] = cards[count++];
-				std::cout << board[i][j] << " ";
+				//std::cout << board[i][j] << " ";
 			}
 		}
-		std::cout << "\n";
+		//std::cout << "\n";
 	}
-	std::cout << "\n";
+	//std::cout << "\n";
 }
 
 // returns the character from the main board which links to a shape in main
