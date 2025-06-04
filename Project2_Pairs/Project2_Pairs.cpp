@@ -7,7 +7,7 @@
 #include "logic.h"
 #include <iostream>
 
-int posX = 0, posY = 0;
+int posX = 0, posY = 0; //global mouse-check
 
 void drawBoard();
 void get_mouse_input(int x, int y, logic& game_logic, int &click);
@@ -16,13 +16,8 @@ void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int &clic
 
 int main()
 {
-
-	logic game_logic;
 	ALLEGRO_DISPLAY* Screen = NULL;
 	int width = 640, height = 480;
-
-	static int click = 0;
-
 
 	if (!al_init())
 	{
@@ -44,12 +39,11 @@ int main()
 	al_init_primitives_addon();
 	al_init_font_addon();
 	al_init_ttf_addon();
+	al_install_keyboard();
 
 	ALLEGRO_FONT* font = al_load_font("DFPPOPCorn-W12.ttf", 14, 0);
 
 	ALLEGRO_FONT* biggerFont = al_load_font("DFPPOPCorn-W12.ttf", 36, 0);
-
-	bool draw = false, done = false;
 
 	ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 
@@ -60,56 +54,79 @@ int main()
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 
 	al_register_event_source(event_queue, al_get_mouse_event_source());
+	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-	game_logic.setup();
-	drawBoard();
+	
 	al_flip_display();
 	
-	while (!done) {
-		ALLEGRO_EVENT ev;
-		al_wait_for_event(event_queue, &ev);
-		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-		{
-			done = true;
-		}
+	bool exit = false;
 
-		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-		{
-			if (ev.mouse.button & 1)
-			{
-				posX = ev.mouse.x;
-				posY = ev.mouse.y;
+	// a huge do/while loop to grasp the game in case the user wants to restart
+	// the inner game loop is a single "game" while this do-while holds as many of said games as needed
+	do {
+		//logic goes here instead of outside in main so its new'd up each restart
+		logic game_logic;
 
-				draw = true;
-			}
-		}
+		bool draw = false, done = false;
+		int click = 0;	//main variable to track which click is pressed
+
+		al_clear_to_color(al_map_rgb(0, 0, 0));
+		game_logic.setup();		// setup function is used like a reset as it does the same thing
 		drawBoard();
-
-		//score drawing:
-		int matches = game_logic.getMatched();
-		int totalPairs = game_logic.getPairs();
-		al_draw_filled_rectangle(512, 384, width, height, al_map_rgb(0, 0, 0));
-		al_draw_textf(font, al_map_rgb(255, 255, 255), 520, 410, 0, "Pairs Left: %i", totalPairs);
-		al_draw_textf(font, al_map_rgb(255, 255, 255), 520, 440, 0, "Matches: %i", matches);
-
-		//close game if you won!!!
-		if (matches == 12) {
-			al_draw_textf(biggerFont, al_map_rgb(255, 0, 0), width / 2, height / 2, ALLEGRO_ALIGN_CENTER, "CONGRATS! You win!");
-			al_draw_textf(biggerFont, al_map_rgb(255, 0, 0), width / 2, height / 2 + 40, ALLEGRO_ALIGN_CENTER, "Press SPACEBAR to play again.");
-			done = true;
-		}
-
-		if (draw) {
-			get_mouse_input(posX, posY, game_logic, click);
-
-			draw = false;
-		}
 		al_flip_display();
-	}
+		//board setup
 
+		// game loop while the user is playing a single "game"
+		while (!done) {
+			ALLEGRO_EVENT ev;
+			al_wait_for_event(event_queue, &ev);
+			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+			{
+				done = true;
+				exit = true;
+			}
+
+			else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+			{
+				if (ev.mouse.button & 1)
+				{
+					posX = ev.mouse.x;
+					posY = ev.mouse.y;
+
+					draw = true;
+				}
+			}
+			//if the user presses spacebar, it will only do something if they've won [reset the game]
+			else if (ev.type == ALLEGRO_EVENT_KEY_DOWN && ev.keyboard.keycode == ALLEGRO_KEY_SPACE) {
+				if (game_logic.getMatched() == 12) {
+					done = true;
+				}
+			}
+			drawBoard();
+
+			//score drawing:
+			int matches = game_logic.getMatched();
+			int totalPairs = game_logic.getPairs();
+			al_draw_filled_rectangle(512, 384, width, height, al_map_rgb(0, 0, 0));
+			al_draw_textf(font, al_map_rgb(255, 255, 255), 520, 410, 0, "Pairs Left: %i", totalPairs);
+			al_draw_textf(font, al_map_rgb(255, 255, 255), 520, 440, 0, "Matches: %i", matches);
+
+			//displays text if you won!!!
+			if (matches == 12) {
+				al_draw_textf(biggerFont, al_map_rgb(255, 0, 0), width / 2, height / 2, ALLEGRO_ALIGN_CENTER, "CONGRATS! You win!");
+				al_draw_textf(biggerFont, al_map_rgb(255, 0, 0), width / 2, height / 2 + 40, ALLEGRO_ALIGN_CENTER, "Press SPACEBAR to play again.");
+			}
+
+			if (draw) {
+				get_mouse_input(posX, posY, game_logic, click); //when clicking to draw, tracks which of two successive clicks it is
+
+				draw = false;
+			}
+			al_flip_display();
+		}
+	} while (!exit);
 
 	
-	al_rest(3.0);
 	al_destroy_font(font);
 	al_destroy_font(biggerFont);
 	al_destroy_event_queue(event_queue);
@@ -118,6 +135,7 @@ int main()
 	return 0;
 }
 
+// draws the board grid
 void drawBoard() {
 	al_draw_line(0, 96, 640, 96, al_map_rgb(255, 255, 255), 2);
 	al_draw_line(0, 192, 640, 192, al_map_rgb(255, 255, 255), 2);
@@ -130,6 +148,8 @@ void drawBoard() {
 	al_draw_line(512, 0, 512, 480, al_map_rgb(255, 255, 255), 2);
 }
 
+// using the passed letter from the back-end array, we check which shape the letter is linked to.
+// at the given center-coords, we simply draw the appropriate shape there.
 void drawShape(int x, int y, char shape) {
 	ALLEGRO_FONT* font = al_load_font("DFPPOPCorn-W12.ttf", 50, 0);
 
@@ -183,6 +203,9 @@ void drawShape(int x, int y, char shape) {
 	al_destroy_font(font);
 }
 
+// from drawing, this function takes the mouse coords as well as which clikc it is for later methods.
+// depending on which square the user clicks on, it passes it into another function with the middle of the square
+// for the shape, & the backend 2DArray coords for logic.
 void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 	//row 1
 	if ((x < 128 && y < 96)) {
@@ -264,6 +287,15 @@ void get_mouse_input(int x, int y, logic& game_logic, int &click) {
 	
 }
 
+// this check if the backend playing board has that point already matched or not [with an 'n']. If not, we check if they're
+// clicking the first time to see the shape, or the second time to guess a pair. it gets the respective shape linked to the letter in the
+// back-end board & stores it before setting the coords in the back-end player's board to that same shape-letter. 
+// then we call draw shape & save the first card's coordinates for later.
+// on the second click, we grab the backend array-char for the proper shape & draw it to the screen, also resetting the click. 
+// it then pauses to show the shapes for a moment before checking if the old-saved coords match these current new ones. 
+// If so, we cover the square & set the back-end playing array's two coordinates to the letter, saving as a match
+// which prevents checking an already-matched card's shape & increasing score. Otherwise, it sets it back to black & resets those
+// back-end array letters to 'n' to allow guessing.
 void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int& click) {
 	if (game_logic.get_playing_shape(boardx, boardy) == 'n') {
 
@@ -279,7 +311,7 @@ void flipCard(int x, int y, int boardx, int boardy, logic& game_logic, int& clic
 			click = 1;
 		}
 		else if (click == 1) {
-
+			
 
 			//check if the section is already clicked!
 			char shape = game_logic.get_shape(boardx, boardy); //get corresponding letter from backend 2Darray

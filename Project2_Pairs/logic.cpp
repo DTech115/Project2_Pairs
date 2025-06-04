@@ -5,6 +5,7 @@
 #include "logic.h"
 #include <iostream>
 
+// constructor fills the two boards with 'n's & sets scores to default
 logic::logic() {
 
 	for (int i = 0; i < 5; i++) {
@@ -18,6 +19,9 @@ logic::logic() {
 
 }
 
+// setup generates 12 letters A-L to a vector, adding each one twice & shuffles them randomly
+// it then adds those randomized letters to the main board, making sure the bottom right is '*' as it's not
+// used in gameplay. 
 void logic::setup() {
 	std::vector<char> cards;
 
@@ -43,19 +47,24 @@ void logic::setup() {
 		}
 		std::cout << "\n";
 	}
-
+	std::cout << "\n";
 }
 
+// returns the character from the main board which links to a shape in main
 char logic::get_shape(int x, int y) {
 	return board[x][y];
 }
+// returns the character from the playing board, which can either be a matched letter [ignored on click]
+// or an 'n' if its free.
 char logic::get_playing_shape(int x, int y) {
 	return playBoard[x][y];
 }
+//sets the character in the playing board to the matched shape-letter
 void logic::set_playing_shape(int x, int y, char c) {
 	playBoard[x][y] = c;
 }
 
+//simply sets the first card's coord info for later comparisons
 void logic::setFirstCard(int x, int y, int boardx, int boardy) {
 	firstCardX = x;
 	firstCardY = y;
@@ -63,7 +72,7 @@ void logic::setFirstCard(int x, int y, int boardx, int boardy) {
 	firstCardBoardY = boardy;
 	
 }
-
+//returns the relevant info
 int logic::getFirstCardX() {
 	return firstCardX;
 }
@@ -78,20 +87,16 @@ int logic::getFirstBoardY() {
 
 }
 
+//increases score
 void logic::increasePairs() {
 	matchedPairs += 1;
 	totalPairs -= 1;
 }
 
+//return pairs & matches
 int logic::getMatched() {
 	return matchedPairs;
 }
-
 int logic::getPairs() {
 	return totalPairs;
-}
-
-
-void logic::reset() {
-	setup();
 }
